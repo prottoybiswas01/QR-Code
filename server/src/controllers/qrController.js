@@ -100,6 +100,7 @@ export const createQRCode = async (req, res, next) => {
  */
 export const getUserQRCodes = async (req, res, next) => {
   try {
+    await connectDB();
     const user = req.user;
     const {
       page = 1,

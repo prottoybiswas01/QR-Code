@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
 
+// Set query buffering
+mongoose.set('bufferCommands', false);
+
 let cached = global.mongoose;
 
 if (!cached) {
@@ -17,8 +20,9 @@ export const connectDB = async () => {
 
   if (!cached.promise) {
     const opts = {
-      serverSelectionTimeoutMS: 10000,
-      socketTimeoutMS: 45000,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 30000,
+      maxPoolSize: 10,
     };
 
     cached.promise = mongoose
@@ -29,7 +33,7 @@ export const connectDB = async () => {
         return m;
       })
       .catch((err) => {
-        console.error(`[Database] Connection Error: ${err.message}`);
+        console.error(`[Database] Connection Warning: ${err.message}`);
         cached.promise = null;
         cached.conn = null;
         return null;
