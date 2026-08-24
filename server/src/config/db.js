@@ -9,7 +9,8 @@ if (!cached) {
 export const connectDB = async () => {
   const mongoURI =
     process.env.MONGODB_URI ||
-    'mongodb+srv://shantodev1670_db_user:PsftPU5JBbuYZJGh@cluster0.mongodb.net/qrcode_platform?retryWrites=true&w=majority';
+    'mongodb+srv://shantodev1670_db_user:PsftPU5JBbuYZJGh@cluster0.ejeb1pp.mongodb.net/qrcode_platform?retryWrites=true&w=majority&appName=Cluster0';
+
 
   if (cached.conn) {
     return cached.conn;

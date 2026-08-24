@@ -14,6 +14,7 @@ import { MyQRCodesPage } from '../pages/MyQRCodesPage';
 import { AnalyticsPage } from '../pages/AnalyticsPage';
 import { ProfilePage } from '../pages/ProfilePage';
 import { SettingsPage } from '../pages/SettingsPage';
+import { SystemHealthPage } from '../pages/SystemHealthPage';
 
 import { PublicQRViewPage } from '../pages/PublicQRViewPage';
 import { DisabledQRPage } from '../pages/DisabledQRPage';
@@ -21,50 +22,54 @@ import { NotFoundPage } from '../pages/NotFoundPage';
 
 import { ProtectedRoute } from './ProtectedRoute';
 import { ErrorBoundary } from '../components/common/ErrorBoundary';
+import { AutoSelfHealer } from '../components/common/AutoSelfHealer';
 
 export const AppRoutes = () => {
   return (
-    <Routes>
-      {/* Public Landing & Marketing */}
-      <Route
-        path="/"
-        element={
-          <ErrorBoundary title="Landing Page Error">
-            <LandingPage />
-          </ErrorBoundary>
-        }
-      />
+    <AutoSelfHealer>
+      <Routes>
+        {/* Public Landing & Marketing */}
+        <Route
+          path="/"
+          element={
+            <ErrorBoundary title="Landing Page Error">
+              <LandingPage />
+            </ErrorBoundary>
+          }
+        />
 
-      {/* Public Authentication */}
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
-      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        {/* Public Authentication */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
-      {/* Public Dynamic QR Viewer Endpoints */}
-      <Route path="/view/:slug" element={<PublicQRViewPage />} />
-      <Route path="/view/disabled" element={<DisabledQRPage />} />
-      <Route path="/view/not-found" element={<NotFoundPage />} />
+        {/* Public Dynamic QR Viewer Endpoints */}
+        <Route path="/view/:slug" element={<PublicQRViewPage />} />
+        <Route path="/view/disabled" element={<DisabledQRPage />} />
+        <Route path="/view/not-found" element={<NotFoundPage />} />
 
-      {/* Protected Dashboard Routes */}
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute>
-            <DashboardLayout />
-          </ProtectedRoute>
-        }
-      >
-        <Route path="dashboard" element={<DashboardPage />} />
-        <Route path="create" element={<CreateQRPage />} />
-        <Route path="edit/:id" element={<EditQRPage />} />
-        <Route path="my-qrs" element={<MyQRCodesPage />} />
-        <Route path="analytics" element={<AnalyticsPage />} />
-        <Route path="profile" element={<ProfilePage />} />
-        <Route path="settings" element={<SettingsPage />} />
-      </Route>
+        {/* Protected Dashboard Routes */}
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="dashboard" element={<DashboardPage />} />
+          <Route path="create" element={<CreateQRPage />} />
+          <Route path="edit/:id" element={<EditQRPage />} />
+          <Route path="my-qrs" element={<MyQRCodesPage />} />
+          <Route path="analytics" element={<AnalyticsPage />} />
+          <Route path="system-health" element={<SystemHealthPage />} />
+          <Route path="profile" element={<ProfilePage />} />
+          <Route path="settings" element={<SettingsPage />} />
+        </Route>
 
-      {/* Fallback 404 Route */}
-      <Route path="*" element={<NotFoundPage />} />
-    </Routes>
+        {/* Fallback 404 Route */}
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </AutoSelfHealer>
   );
 };

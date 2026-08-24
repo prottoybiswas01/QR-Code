@@ -16,8 +16,9 @@
    - **Root Directory**: `Edit` বাটনে ক্লিক করে `server` ফোল্ডারটি সিলেক্ট করুন।
    - **Framework Preset**: `Other` সিলেক্ট করুন।
 4. **Environment Variables** যোগ করুন:
-   - `MONGODB_URI` = `mongodb+srv://shantodev1670_db_user:PsftPU5JBbuYZJGh@cluster0.mongodb.net/qrcode_platform?retryWrites=true&w=majority`
+   - `MONGODB_URI` = `mongodb+srv://shantodev1670_db_user:PsftPU5JBbuYZJGh@cluster0.ejeb1pp.mongodb.net/qrcode_platform?retryWrites=true&w=majority&appName=Cluster0`
    - `NODE_ENV` = `production`
+
    - `BASE_URL` = *(ডিপ্লয় হওয়ার পর যে Vercel URL পাবেন, যেমন: `https://your-qr-backend.vercel.app`)*
    - `CLIENT_URL` = *(আপনার Frontend Vercel URL, যেমন: `https://your-qr-client.vercel.app`)*
 5. **Deploy** বাটনে ক্লিক করুন।

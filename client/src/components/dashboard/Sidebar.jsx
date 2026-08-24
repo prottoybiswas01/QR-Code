@@ -11,6 +11,7 @@ import {
   Sparkles,
   Wifi,
   Layers,
+  Bot,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -23,6 +24,7 @@ export const Sidebar = ({ mobileOpen, setMobileOpen }) => {
     { to: '/my-qrs', label: 'My QR Codes', icon: QrCode },
     { to: '/create', label: 'Create QR', icon: PlusCircle, highlight: true },
     { to: '/analytics', label: 'Analytics', icon: BarChart3 },
+    { to: '/system-health', label: 'AI Health & Fix', icon: Bot },
     { to: '/profile', label: 'My Profile', icon: User },
     { to: '/settings', label: 'Settings', icon: Settings },
   ];

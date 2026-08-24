@@ -8,8 +8,10 @@ import authRoutes from './routes/authRoutes.js';
 import qrRoutes from './routes/qrRoutes.js';
 import redirectRoutes from './routes/redirectRoutes.js';
 import analyticsRoutes from './routes/analyticsRoutes.js';
+import systemRoutes from './routes/systemRoutes.js';
 import { notFoundHandler, errorHandler } from './middleware/errorMiddleware.js';
 import { apiLimiter } from './middleware/rateLimiter.js';
+
 
 dotenv.config();
 
@@ -70,6 +72,8 @@ app.use('/api', apiLimiter);
 app.use('/api/auth', authRoutes);
 app.use('/api/qr', qrRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/system', systemRoutes);
+
 
 // 404 & Centralized Error Handlers
 app.use(notFoundHandler);
