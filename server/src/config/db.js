@@ -1,19 +1,47 @@
 import mongoose from 'mongoose';
 
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
+
 export const connectDB = async () => {
+  const mongoURI =
+    process.env.MONGODB_URI ||
+    'mongodb+srv://shantodev1670_db_user:PsftPU5JBbuYZJGh@cluster0.mongodb.net/qrcode_platform?retryWrites=true&w=majority';
+
+  if (cached.conn) {
+    return cached.conn;
+  }
+
+  if (!cached.promise) {
+    const opts = {
+      bufferCommands: false,
+      serverSelectionTimeoutMS: 5000,
+    };
+
+    cached.promise = mongoose
+      .connect(mongoURI, opts)
+      .then((m) => {
+        console.log(`[Database] MongoDB Connected: ${m.connection.host}`);
+        return m;
+      })
+      .catch((err) => {
+        console.error(`[Database] Connection Error: ${err.message}`);
+        cached.promise = null;
+        return null;
+      });
+  }
+
   try {
-    const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/qrcode_platform';
-    console.log(`[Database] Connecting to MongoDB...`);
-    
-    const conn = await mongoose.connect(mongoURI, {
-      serverSelectionTimeoutMS: 8000,
-    });
-    
-    console.log(`[Database] MongoDB Connected: ${conn.connection.host}`);
-    return conn;
-  } catch (error) {
-    console.error(`[Database] Connection Error: ${error.message}`);
-    console.warn(`[Database] Running in disconnected/fallback mode until MongoDB connection is available.`);
+    cached.conn = await cached.promise;
+  } catch (e) {
+    cached.promise = null;
+    console.error(`[Database] Connection Error: ${e.message}`);
     return null;
   }
+
+  return cached.conn;
 };
+
