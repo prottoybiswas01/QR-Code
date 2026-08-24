@@ -13,17 +13,29 @@ export const getProfile = async (req, res, next) => {
     const user = req.user;
     
     // Calculate current usage stats
-    const totalQRs = await QRCode.countDocuments({ userId: user._id });
-    const dynamicQRs = await QRCode.countDocuments({ userId: user._id, mode: 'dynamic' });
-    const staticQRs = await QRCode.countDocuments({ userId: user._id, mode: 'static' });
-    const activeQRs = await QRCode.countDocuments({ userId: user._id, status: 'active' });
+    let totalQRs = 0;
+    let dynamicQRs = 0;
+    let staticQRs = 0;
+    let activeQRs = 0;
+    let totalScans = 0;
 
-    // Aggregate total scans across all user's QRs
-    const scanAggregation = await QRCode.aggregate([
-      { $match: { userId: user._id } },
-      { $group: { _id: null, totalScans: { $sum: '$scanCount' } } },
-    ]);
-    const totalScans = scanAggregation[0]?.totalScans || 0;
+    try {
+      if (user._id && connectDB) {
+        totalQRs = await QRCode.countDocuments({ userId: user._id });
+        dynamicQRs = await QRCode.countDocuments({ userId: user._id, mode: 'dynamic' });
+        staticQRs = await QRCode.countDocuments({ userId: user._id, mode: 'static' });
+        activeQRs = await QRCode.countDocuments({ userId: user._id, status: 'active' });
+
+        const scanAggregation = await QRCode.aggregate([
+          { $match: { userId: user._id } },
+          { $group: { _id: null, totalScans: { $sum: '$scanCount' } } },
+        ]);
+        totalScans = scanAggregation[0]?.totalScans || 0;
+      }
+    } catch (e) {
+      console.warn('[Profile Controller] Stats fallback:', e.message);
+    }
+
 
     res.status(200).json({
       success: true,
