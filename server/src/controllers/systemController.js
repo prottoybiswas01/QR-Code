@@ -1,6 +1,7 @@
 import { SystemBugLog } from '../models/SystemBugLog.js';
 import { QRCode } from '../models/QRCode.js';
 import { parseScanRequest } from '../utils/analyticsParser.js';
+import { connectDB } from '../config/db.js';
 
 /**
  * AI Root Cause Analysis Engine & Patch Generator
@@ -49,6 +50,7 @@ const generateAiDiagnosis = (message = '', stack = '', route = '/') => {
  */
 export const reportAndHealBug = async (req, res, next) => {
   try {
+    await connectDB();
     const { errorType = 'RuntimeError', message, stack, componentStack, route } = req.body;
     const deviceInfo = parseScanRequest(req);
 
@@ -97,6 +99,7 @@ export const reportAndHealBug = async (req, res, next) => {
  */
 export const getSystemHealthOverview = async (req, res, next) => {
   try {
+    await connectDB();
     const totalBugsLogged = await SystemBugLog.countDocuments();
     const autoHealedBugs = await SystemBugLog.countDocuments({ status: 'auto-healed' });
 
@@ -135,6 +138,7 @@ export const getSystemHealthOverview = async (req, res, next) => {
  */
 export const triggerManualDiagnose = async (req, res, next) => {
   try {
+    await connectDB();
     const totalQRs = await QRCode.countDocuments();
 
     res.status(200).json({

@@ -2,6 +2,7 @@ import { QRCode } from '../models/QRCode.js';
 import { ScanAnalytics } from '../models/ScanAnalytics.js';
 import { generateUniqueSlug } from '../utils/slugGenerator.js';
 import { formatStaticPayload } from '../utils/qrFormatter.js';
+import { connectDB } from '../config/db.js';
 
 /**
  * @desc Create a new QR Code (Dynamic or Static)
@@ -9,6 +10,7 @@ import { formatStaticPayload } from '../utils/qrFormatter.js';
  */
 export const createQRCode = async (req, res, next) => {
   try {
+    await connectDB();
     const user = req.user;
     const {
       name,

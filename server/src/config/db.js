@@ -11,26 +11,27 @@ export const connectDB = async () => {
     process.env.MONGODB_URI ||
     'mongodb+srv://shantodev1670_db_user:PsftPU5JBbuYZJGh@cluster0.ejeb1pp.mongodb.net/qrcode_platform?retryWrites=true&w=majority&appName=Cluster0';
 
-
-  if (cached.conn) {
+  if (cached.conn && mongoose.connection.readyState === 1) {
     return cached.conn;
   }
 
   if (!cached.promise) {
     const opts = {
-      bufferCommands: false,
-      serverSelectionTimeoutMS: 5000,
+      serverSelectionTimeoutMS: 10000,
+      socketTimeoutMS: 45000,
     };
 
     cached.promise = mongoose
       .connect(mongoURI, opts)
       .then((m) => {
         console.log(`[Database] MongoDB Connected: ${m.connection.host}`);
+        cached.conn = m;
         return m;
       })
       .catch((err) => {
         console.error(`[Database] Connection Error: ${err.message}`);
         cached.promise = null;
+        cached.conn = null;
         return null;
       });
   }
@@ -39,10 +40,9 @@ export const connectDB = async () => {
     cached.conn = await cached.promise;
   } catch (e) {
     cached.promise = null;
+    cached.conn = null;
     console.error(`[Database] Connection Error: ${e.message}`);
-    return null;
   }
 
   return cached.conn;
 };
-

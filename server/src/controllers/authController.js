@@ -1,6 +1,7 @@
 import { User } from '../models/User.js';
 import { QRCode } from '../models/QRCode.js';
 import { ScanAnalytics } from '../models/ScanAnalytics.js';
+import { connectDB } from '../config/db.js';
 
 /**
  * @desc Get current authenticated user profile & quota stats
@@ -8,6 +9,7 @@ import { ScanAnalytics } from '../models/ScanAnalytics.js';
  */
 export const getProfile = async (req, res, next) => {
   try {
+    await connectDB();
     const user = req.user;
     
     // Calculate current usage stats

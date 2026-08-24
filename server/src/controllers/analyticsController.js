@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { QRCode } from '../models/QRCode.js';
 import { ScanAnalytics } from '../models/ScanAnalytics.js';
+import { connectDB } from '../config/db.js';
 
 /**
  * @desc Get aggregated scan analytics for a specific QR code
@@ -8,6 +9,7 @@ import { ScanAnalytics } from '../models/ScanAnalytics.js';
  */
 export const getQRAnalytics = async (req, res, next) => {
   try {
+    await connectDB();
     const { id } = req.params;
     const user = req.user;
     const { period = '30d' } = req.query;
@@ -109,6 +111,7 @@ export const getQRAnalytics = async (req, res, next) => {
  */
 export const getDashboardOverview = async (req, res, next) => {
   try {
+    await connectDB();
     const user = req.user;
 
     // Fetch all user QR IDs

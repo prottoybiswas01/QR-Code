@@ -1,6 +1,7 @@
 import { QRCode } from '../models/QRCode.js';
 import { ScanAnalytics } from '../models/ScanAnalytics.js';
 import { parseScanRequest } from '../utils/analyticsParser.js';
+import { connectDB } from '../config/db.js';
 
 /**
  * Log scan event asynchronously without blocking response
@@ -41,6 +42,7 @@ const logScanEvent = async (qrCode, req) => {
  */
 export const handleDynamicRedirect = async (req, res, next) => {
   try {
+    await connectDB();
     const { slug } = req.params;
     const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
 
