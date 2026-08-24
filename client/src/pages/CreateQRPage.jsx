@@ -95,10 +95,7 @@ export const CreateQRPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!name.trim()) {
-      toast.error('Please enter a name for your QR Code.');
-      return;
-    }
+    const finalName = name.trim() || `${type.charAt(0).toUpperCase() + type.slice(1)} QR ${new Date().toLocaleDateString()}`;
 
     if (type === 'wifi' && !metadata.ssid?.trim()) {
       toast.error('Please specify the Wi-Fi Network Name (SSID).');
@@ -111,10 +108,10 @@ export const CreateQRPage = () => {
     }
 
     const payload = {
-      name: name.trim(),
+      name: finalName,
       type,
       mode,
-      destination,
+      destination: destination.trim(),
       metadata,
       customization,
     };

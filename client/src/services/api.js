@@ -16,16 +16,28 @@ export const apiRequest = async (endpoint, options = {}) => {
     ...(options.headers || {}),
   };
 
-  // Attach Firebase ID Token if user is logged in
+  // Attach Auth Token if user is logged in
   try {
-    if (auth.currentUser) {
+    if (auth?.currentUser) {
       const token = await auth.currentUser.getIdToken(false);
       headers['Authorization'] = `Bearer ${token}`;
+      if (auth.currentUser.email) {
+        headers['x-user-email'] = auth.currentUser.email;
+      }
     } else {
-      // Check for local storage mock token if any
+      // Check for local storage session token
       const devToken = localStorage.getItem('qrflex_dev_token');
       if (devToken) {
         headers['Authorization'] = `Bearer ${devToken}`;
+        const devUser = localStorage.getItem('qrflex_dev_user');
+        if (devUser) {
+          try {
+            const parsed = JSON.parse(devUser);
+            if (parsed.email) headers['x-user-email'] = parsed.email;
+          } catch (e) {
+            // ignore
+          }
+        }
       }
     }
   } catch (err) {
